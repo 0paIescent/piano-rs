@@ -19,5 +19,8 @@ rodio = "0.9"
 rustbox = { version = "0.11", path = "vendor/rustbox" }
 yaml-rust = "0.4"
 
+termion = "1.5"
+tui = "0.6.2"
+
 [[bin]]
 name = "piano-rs"

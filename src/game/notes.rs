@@ -3,13 +3,16 @@ pub mod play;
 use std::num::ParseIntError;
 use std::convert::Infallible;
 use serde_derive::{Serialize, Deserialize};
-use rustbox::{Key, Color};
 use std::time::Duration;
 pub use play::Player;
+
+use tui::style::Color;
+use termion::event::Key;
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(remote = "Color")]
 pub enum ColorDef {
+    Reset,
     Black,
     Red,
     Green,
@@ -17,12 +20,20 @@ pub enum ColorDef {
     Blue,
     Magenta,
     Cyan,
+    Gray,
+    DarkGray,
+    LightRed,
+    LightGreen,
+    LightYellow,
+    LightBlue,
+    LightMagenta,
+    LightCyan,
     White,
-    Byte(u16),
-    Default,
+    Rgb(u8, u8, u8),
+    Indexed(u8),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Note {
     pub sound: String,
     pub base: String,
@@ -132,10 +143,10 @@ pub fn key_to_base_note(mut key: Key, sequence: i8) -> Option<String> {
 
 
     // Handle terminal control characters
-    if key == Key::Enter {
+    if key == Key::Char('\n') {
         // Ctrl+m sends Enter in terminal
         key = Key::Ctrl('m');
-    } else if key == Key::Tab {
+    } else if key == Key::Char('\t') {
         // Ctrl+i sends Tab in terminal
         key = Key::Ctrl('i');
     }
@@ -255,4 +266,3 @@ mod test {
         assert!(base_note.is_none());
     }
 }
-
